@@ -1,0 +1,35 @@
+{block content}
+	<h1>Můj blog</h1>
+
+	<h2>Prispevky</h2>
+
+	<div n:foreach="$posts as $post" class="post">
+		<div class="date">{$post->created_at|date:'F j, Y'}</div>
+
+		{* <h2>{$post->title}</h2> *}
+		<h2><a n:href="Post:show $post->id">{$post->title} ({$post->views_count})</a></h2>
+		{ifset $post->category}
+			<p>Category: {$post->category->name}</p>
+		{/ifset}
+		
+		<div>{$post->content|truncate:256}</div>
+	</div>
+
+	<div class="pagination">
+	{if !$paginator->isFirst()}
+		<a n:href="default, 1">První</a>
+		&nbsp;|&nbsp;
+		<a n:href="default, $paginator->page-1">Předchozí</a>
+		&nbsp;|&nbsp;
+	{/if}
+
+	Stránka {$paginator->getPage()} z {$paginator->getPageCount()}
+
+	{if !$paginator->isLast()}
+		&nbsp;|&nbsp;
+		<a n:href="default, $paginator->getPage() + 1">Další</a>
+		&nbsp;|&nbsp;
+		<a n:href="default, $paginator->getPageCount()">Poslední</a>
+	{/if}
+</div>
+{/block}

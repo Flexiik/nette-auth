@@ -15,6 +15,6 @@ application:
 # 	password:
 
 database:
-	dsn: 'mysql:host=127.0.0.1;dbname=nette_auth'
+	dsn: 'mysql:host=127.0.0.1;dbname=usertest'
 	user: root
 	password: 
