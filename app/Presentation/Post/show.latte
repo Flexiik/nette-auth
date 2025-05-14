@@ -6,6 +6,19 @@
 
 {block title}<h1>{$post->title}</h1>{/block}
 <p>Pocet Zhlednuti: {$post->views_count}</p>
+
+{snippet likes}
+<div class="my-md-3">
+	<p>
+		👍 {$post->likes} | 👎 {$post->dislikes}
+	</p>
+	{if $user->isLoggedIn()}
+		<a class="ajax" n:href="liked! $post->id,1">Líbí se mi!</a>
+		<a class="ajax" n:href="liked! $post->id,0">Nelíbí se mi!</a>
+	{/if}
+</div>
+{/snippet}
+
 <p>Stav: {$post->status}</p>
 
 <div class="post">{$post->content}</div>
@@ -17,10 +30,7 @@
 
 <br>
 
-{if $user->isLoggedIn()}
-<a n:href="liked! $post->id,1">Líbí se mi!</a>
-<a n:href="liked! $post->id,0">Nelíbí se mi!</a>
-{/if}
+
 
 {if ($post->status == "OPEN") || ($post->status == "CLOSED" && $user->isLoggedIn())}
 	<h2>Post new comment</h2>

@@ -64,6 +64,19 @@ final class PostFacade
             ->get($postId);
     }
 
+    public function getPostWithLikes(int $postId)
+    {
+        return $this->database->query('
+        SELECT 
+            posts.*,
+            (SELECT COUNT(*) FROM rating WHERE rating.post_id = posts.id AND liked = 1) AS likes,
+            (SELECT COUNT(*) FROM rating WHERE rating.post_id = posts.id AND liked = 0) AS dislikes
+        FROM posts
+        WHERE posts.id = ?
+        LIMIT 1
+    ', $postId)->fetch();
+    }
+
     public function updatePost(int $postId, array $data) {
         $post = $this->getPostById($postId);
         $post->update($data);
@@ -73,7 +86,6 @@ final class PostFacade
     public function addView(int $postId) {
         $post = $this->getPostById($postId);
         $post->update(["views_count" => $post->views_count + 1]);
-        return $post;
     }
 
     public function getPostsCount(): int

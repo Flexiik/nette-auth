@@ -13,7 +13,8 @@ final class PostPresenter extends Nette\Application\UI\Presenter
 	}
 
     public function renderShow(int $id): void {
-        $post = $this->facade->addView($id);
+        $this->facade->addView($id);
+		$post = $this->facade->getPostWithLikes($id);
         if (!$post) {
             $this->error('Stránka nebyla nalezena');
         }
@@ -29,5 +30,11 @@ final class PostPresenter extends Nette\Application\UI\Presenter
 	public function handleLiked(int $postId, int $liked) {
      // pokud je uživatel přihlášen budete volat PostFacade metodu updateRating
 		$this->facade->updateRating($this->getUser()->getId(), $postId, $liked);
+		if ($this->isAjax()) {
+			// překresli snippet s názvem image
+			$this->redrawControl('likes');
+			return;
+		}
+		$this->redirect('this');
 	}
 }
