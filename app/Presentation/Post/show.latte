@@ -17,6 +17,11 @@
 
 <br>
 
+{if $user->isLoggedIn()}
+<a n:href="liked! $post->id,1">Líbí se mi!</a>
+<a n:href="liked! $post->id,0">Nelíbí se mi!</a>
+{/if}
+
 {if ($post->status == "OPEN") || ($post->status == "CLOSED" && $user->isLoggedIn())}
 	<h2>Post new comment</h2>
 	<p>NOT WORKING</p>

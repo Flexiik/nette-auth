@@ -18,14 +18,40 @@ final class PostFacade
     //         ->order('created_at DESC');
     // }
 
+    public function updateRating(int $userId, int $postId, ?int $liked): void
+    {
+        $row = $this->database->table('rating')
+            ->where('user_id', $userId)
+            ->where('post_id', $postId)
+            ->fetch();
+
+        if ($row) {
+            // Pokud řádek existuje, udělej update
+            $row->update([
+                'liked' => $liked,
+            ]);
+        } else {
+            // Pokud neexistuje, udělej insert
+            $this->database->table('rating')->insert([
+                'user_id' => $userId,
+                'post_id' => $postId,
+                'liked' => $liked,
+            ]);
+        }
+    }
+
     public function getPublicArticles(int $limit, int $offset): Nette\Database\ResultSet
     {
         return $this->database->query('
-			SELECT * FROM posts
-			WHERE created_at < ?
-			ORDER BY created_at DESC
-			LIMIT ?
-			OFFSET ?',
+        SELECT 
+            posts.*,
+            (SELECT COUNT(*) FROM rating WHERE rating.post_id = posts.id AND liked = 1) AS likes,
+            (SELECT COUNT(*) FROM rating WHERE rating.post_id = posts.id AND liked = 0) AS dislikes
+        FROM posts
+        WHERE created_at < ?
+        ORDER BY created_at DESC
+        LIMIT ?
+        OFFSET ?',
             new \DateTime,
             $limit,
             $offset,

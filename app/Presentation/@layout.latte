@@ -18,9 +18,47 @@
 		{* Flash messages display block *}
 		<div n:foreach="$flashes as $flash" n:class="alert, 'alert-' . $flash->type">{$flash->message}</div>
 
+		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+			<div class="container-fluid">
+				<a class="navbar-brand" n:href="Home:default">📰 BlogApp</a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link" n:href="Home:default">Posts</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" n:href="Dashboard:default">Dashboard</a>
+						</li>
+					</ul>
+
+					<ul class="navbar-nav">
+						{if $user->isLoggedIn()}
+							<li class="nav-item">
+								<a class="nav-link" n:href="Sign:out">Logout ({$user->identity->username})</a>
+							</li>
+						{else}
+							<li class="nav-item">
+								<a class="nav-link" n:href="Sign:in">Login</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" n:href="Sign:up">Register</a>
+							</li>
+						{/if}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
 		{* Main content of the child template goes here *}
 		{include content}
 	</div>
+
+	
 
 	{* Scripts block; by default includes Nette Forms script for validation *}
 	{block scripts}

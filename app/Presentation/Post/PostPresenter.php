@@ -25,4 +25,9 @@ final class PostPresenter extends Nette\Application\UI\Presenter
 
         $this->template->post = $post;
     }
+
+	public function handleLiked(int $postId, int $liked) {
+     // pokud je uživatel přihlášen budete volat PostFacade metodu updateRating
+		$this->facade->updateRating($this->getUser()->getId(), $postId, $liked);
+	}
 }

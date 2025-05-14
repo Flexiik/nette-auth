@@ -11,6 +11,9 @@
 		{ifset $post->category}
 			<p>Category: {$post->category->name}</p>
 		{/ifset}
+		<p>
+			👍 {$post->likes} | 👎 {$post->dislikes}
+		</p>
 		
 		<div>{$post->content|truncate:256}</div>
 	</div>
